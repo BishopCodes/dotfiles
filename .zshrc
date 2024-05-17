@@ -150,8 +150,8 @@ zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 
 ### Theme stuff ###
+# source ~/.p10k.zsh
 # ZSH_THEME="powerlevel10k/powerlevel10k"
-#
 
 ### History ###
 HISTSIZE=5000

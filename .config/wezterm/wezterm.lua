@@ -1,7 +1,7 @@
 local wezterm = require("wezterm")
 return {
 	-- color_scheme = 'termnial.sexy',
-	color_scheme = "Aura Dark",
+	color_scheme = "Ayu Custom",
 	enable_tab_bar = false,
 	font_size = 16.0,
 	-- macos_window_background_blur = 40,

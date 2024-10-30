@@ -8,7 +8,12 @@ fi
 # Homebrew reference
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+# SDKMan
+export SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
+[[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
+
 ### Paths ###
+export PATH="$PATH:$HOME/.local/bin"
 
 # Node version manager
 export NVM_DIR="$HOME/.nvm"
@@ -95,6 +100,23 @@ alias server='python3 -m http.server 4445'
 alias tunnel='ngrok http 4445'
 
 alias seshc='sesh connect $(sesh list | fzf)'
+
+fzjq() {
+  local input jq_query
+  if [ -t 0 ]; then
+    # Read input from file if provided
+    input=$(cat "$1")
+  else
+    # Read input from stdin
+    input=$(cat)
+  fi
+  
+  # Use fzf to get the jq query interactively
+  jq_query=$(echo "Enter jq query:" | fzf --print-query --preview "echo \"$input\" | jq {q}" --preview-window=right:60%)
+  
+  # Run jq with the query on the input
+  echo "$input" | jq "$jq_query"
+}
 
 ### ZINIT ###
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"

@@ -37,7 +37,7 @@ export PATH="$PATH:${GOPATH}/bin:${GOROOT}/bin"
 
 # Tmuxifier
 export PATH="$HOME/.tmuxifier/bin:$PATH"
-export EDITOR=nvim
+export EDITOR=/opt/homebrew/bin/nvim
 
 # Add .NET Core SDK tools
 export PATH="$PATH:$HOME/.dotnet/tools"
@@ -45,7 +45,20 @@ export PATH="$PATH:$HOME/.dotnet/tools"
 # Lua langage server
 export PATH="$PATH:/opt/homebrew/bin/lua-language-server"
 
+# ZSH Autosuggest
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+bindkey '^w' autosuggest-execute
+bindkey '^e' autosuggest-accept
+bindkey '^u' autosuggest-toggle
+bindkey '^L' vi-forward-word
+bindkey '^k' up-line-or-search
+bindkey '^j' down-line-or-search
+
 ### Aliases ###
+
+# Aerospace
+alias as=aerospace
+alias asfzf="aerospace list-windows --all | fzf --bind 'enter:execute(bash -c \"aerospace focus --window-id {1}\")+abort'"
 
 # config shortcuts
 alias vscode="/Applications/Visual\ Studio\ Code.app/contents/Resources/app/bin/code"
@@ -205,3 +218,7 @@ bindkey '^n' history-search-forward
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+PATH=~/.console-ninja/.bin:$PATH
+# Created by `pipx` on 2024-09-10 14:38:35
+export PATH="$PATH:/Users/Dale.Bishop/.local/bin"

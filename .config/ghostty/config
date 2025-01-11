@@ -1,0 +1,5 @@
+theme = dark:aura,light:catppuccin-latte
+background-opacity = 0.9
+background-blur-radius = 10
+macos-titlebar-style = hidden
+font-size = 20

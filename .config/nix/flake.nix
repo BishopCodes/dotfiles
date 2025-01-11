@@ -13,25 +13,25 @@
   };
 
   outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew }:
-  # outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew, home-manager }:
-  let
-    configuration = { pkgs, config, ... }: {
-      # List packages installed in system profile. To search by name, run:
-      # $ nix-env -qaP | grep wget
+    # outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew, home-manager }:
+    let
+      configuration = { pkgs, config, ... }: {
+        # List packages installed in system profile. To search by name, run:
+        # $ nix-env -qaP | grep wget
 
-      nixpkgs.config.allowUnfree = true;
+        nixpkgs.config.allowUnfree = true;
 
-      environment.systemPackages =
-        [ 
+        environment.systemPackages =
+          [
             pkgs.mkalias
             pkgs.neovim
             pkgs.obsidian # requires allowUnfree
             pkgs.tmux
             pkgs.fira-code
             pkgs.raycast
-        ];
+          ];
 
-      homebrew = {
+        homebrew = {
           enable = true;
           brews = [
             "mas"
@@ -39,77 +39,78 @@
           ];
           casks = [
             "ghostty"
-        ];
+          ];
           masApps = {
-          # "FriendlyName" = "AppleAppStoreAppId"
-        };
-        # Will remove anything not declared here
-        # onActivation.cleanup = "zap";
-        onActivation.autoUpdate = true;
-        onActivation.upgrade = true;
+            # "FriendlyName" = "AppleAppStoreAppId"
+          };
+          # Will remove anything not declared here
+          # onActivation.cleanup = "zap";
+          onActivation.autoUpdate = true;
+          onActivation.upgrade = true;
         };
 
-      fonts.packages = [
+        fonts.packages = [
           (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
-      ];
+        ];
 
-      system.activationScripts.applications.text = let 
-        env = pkgs.buildEnv {
-          name = "system-applications";
-          paths = config.environment.systemPackages;
-          pathsToLink = "/Applications";
-        };
-      in
-        pkgs.lib.mkForce ''
-        # Set up applications.
-        echo "setting up /Applications..." >&2
-        rm -rf /Applications/Nix\ Apps
-        mkdir -p /Applications/Nix\ Apps
-        find ${env}/Applications -maxdepth 1 -type l -exec readlink '{}' + |
-        while read src; do
-          app_name=$(basename "$src")
-          echo "copying $src" >&2
-          ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
-        done
-        '';
+        system.activationScripts.applications.text =
+          let
+            env = pkgs.buildEnv {
+              name = "system-applications";
+              paths = config.environment.systemPackages;
+              pathsToLink = "/Applications";
+            };
+          in
+          pkgs.lib.mkForce ''
+            # Set up applications.
+            echo "setting up /Applications..." >&2
+            rm -rf /Applications/Nix\ Apps
+            mkdir -p /Applications/Nix\ Apps
+            find ${env}/Applications -maxdepth 1 -type l -exec readlink '{}' + |
+            while read src; do
+              app_name=$(basename "$src")
+              echo "copying $src" >&2
+              ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
+            done
+          '';
 
-      home-manager.backupFileExtension = "backup";
-      nix.configureBuildUsers = true;
-      nix.useDaemon = true;
+        # home-manager.backupFileExtension = "backup";
+        nix.configureBuildUsers = true;
+        nix.useDaemon = true;
 
-      system.defaults = {
+        system.defaults = {
           # mynixos.org
           dock.autohide = true;
         };
 
-      # Auto upgrade nix package and the daemon service
-      services.nix-daemon.enable = true;
-      # nix.package = pkgs.nix;}
+        # Auto upgrade nix package and the daemon service
+        services.nix-daemon.enable = true;
+        # nix.package = pkgs.nix;}
 
-      # Necessary for using flakes on this system.
-      nix.settings.experimental-features = "nix-command flakes";
+        # Necessary for using flakes on this system.
+        nix.settings.experimental-features = "nix-command flakes";
 
-      # Enable alternative shell support in nix-darwin.
-      programs.zsh.enable = true;
-      # programs.fish.enable = true;
+        # Enable alternative shell support in nix-darwin.
+        programs.zsh.enable = true;
+        # programs.fish.enable = true;
 
-      # Set Git commit hash for darwin-version.
-      system.configurationRevision = self.rev or self.dirtyRev or null;
+        # Set Git commit hash for darwin-version.
+        system.configurationRevision = self.rev or self.dirtyRev or null;
 
-      # Used for backwards compatibility, please read the changelog before changing.
-      # $ darwin-rebuild changelog
-      system.stateVersion = 5;
+        # Used for backwards compatibility, please read the changelog before changing.
+        # $ darwin-rebuild changelog
+        system.stateVersion = 5;
 
-      # The platform the configuration will be used on.
-      nixpkgs.hostPlatform = "aarch64-darwin";
-    };
-  in
-  {
-    # Build darwin flake using:
-    # $ darwin-rebuild build --flake .#simple
-    darwinConfigurations."work" = nix-darwin.lib.darwinSystem {
-      modules = [ 
-          configuration 
+        # The platform the configuration will be used on.
+        nixpkgs.hostPlatform = "aarch64-darwin";
+      };
+    in
+    {
+      # Build darwin flake using:
+      # $ darwin-rebuild build --flake .#simple
+      darwinConfigurations."work" = nix-darwin.lib.darwinSystem {
+        modules = [
+          configuration
           # home-manager.darwinModules.home-manager {
           #   home-manager.useGlobalPkgs = true;
           #   home-manager.useUserPackages = true;
@@ -135,8 +136,8 @@
             };
           }
         ];
+      };
+      # Expose the package set, including overlays, for convenience.
+      darwinPackages = self.darwinConfigurations."work".pkgs;
     };
-    # Expose the package set, including overlays, for convenience.
-    darwinPackages = self.darwinConfigurations."work".pkgs;
-  };
 }

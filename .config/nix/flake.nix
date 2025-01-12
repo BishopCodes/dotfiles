@@ -29,6 +29,65 @@
             pkgs.tmux
             pkgs.fira-code
             pkgs.raycast
+            pkgs.clang-tools
+            pkgs.cmake
+            pkgs.go
+            pkgs.gotools
+            pkgs.golangci-lint
+            pkgs.lua-language-server
+            pkgs.rustup
+            pkgs.rustfmt
+            pkgs.rust-analyzer
+            pkgs.sqlc
+            pkgs.stylua
+            pkgs.tailwindcss
+            pkgs.tailwindcss-language-server
+            pkgs.zoxide
+            pkgs.git
+            pkgs.nil
+            pkgs.air
+            pkgs.awscli
+            pkgs.opentofu
+            pkgs.tflint
+            pkgs.ripgrep
+            pkgs.stow
+            pkgs.zig
+            pkgs.zls
+            pkgs.lldb
+            pkgs.dotnet-sdk_8
+            pkgs.omnisharp-roslyn
+            pkgs.mono
+            pkgs.msbuild
+            pkgs.gcc
+            pkgs.maven
+            pkgs.jdk
+            pkgs.kotlin
+            pkgs.zlib
+            pkgs.pulumi-bin
+            pkgs.nodejs
+            pkgs.jq
+            pkgs.kubectl
+            pkgs.python3
+            pkgs.openssl
+            pkgs.spellcheck
+            pkgs.bun
+            pkgs.sdkmanager
+            pkgs.eza
+            pkgs.bat
+            pkgs.podman
+            pkgs.podman-desktop
+            pkgs.podman-compose
+            pkgs.soapui
+            pkgs.dbeaver-bin
+            pkgs.obs-studio
+            pkgs.keycastr
+            pkgs.keymapp
+            pkgs.ollama
+            pkgs.localstack
+            pkgs.keepassxc
+            pkgs.keystore-explorer
+            # https://www.insta360.com/download/insta360-link2
+            # https://www.elgato.com/us/en/s/downloads
           ];
 
         homebrew = {
@@ -36,9 +95,13 @@
           brews = [
             "mas"
             "stow"
+            "sketchybar"
+            "spotify"
+            "stow"
           ];
           casks = [
             "ghostty"
+            "nikitabobko/tap/aerospace"
           ];
           masApps = {
             # "FriendlyName" = "AppleAppStoreAppId"

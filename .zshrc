@@ -9,8 +9,8 @@ fi
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # SDKMan
-export SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
-[[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
+# export SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
+# [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
 
 ### Paths ###
 export PATH="$PATH:$HOME/.local/bin"
@@ -32,8 +32,7 @@ export PATH="$PNPM_HOME:$PATH"
 
 # go
 export GOPATH="$HOME/go"
-export GOROOT="$(brew --prefix golang)/libexec"
-export PATH="$PATH:${GOPATH}/bin:${GOROOT}/bin"
+export PATH="$PATH:${GOPATH}/bin"
 
 # Tmuxifier
 export PATH="$HOME/.tmuxifier/bin:$PATH"
@@ -46,7 +45,7 @@ export PATH="$PATH:$HOME/.dotnet/tools"
 export PATH="$PATH:/opt/homebrew/bin/lua-language-server"
 
 # ZSH Autosuggest
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+# source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 bindkey '^w' autosuggest-execute
 bindkey '^e' autosuggest-accept
 bindkey '^u' autosuggest-toggle
@@ -132,16 +131,17 @@ fzjq() {
 }
 
 ### ZINIT ###
-ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+ZINIT_HOME=$(nix eval --raw nixpkgs#zinit.outPath)
+# ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
 # Grab Zinit if we dont have it already
-if [ ! -d "$ZINIT_HOME" ]; then
-  mkdir -p "$(dirname $ZINIT_HOME)"
-  git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
-fi
+# if [ ! -d "$ZINIT_HOME" ]; then
+#   mkdir -p "$(dirname $ZINIT_HOME)"
+#   git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+# fi
 
 # Load Zinit
-source "${ZINIT_HOME}/zinit.zsh"
+source "${ZINIT_HOME}/share/zinit/zinit.zsh"
 
 # Powerlevel passing depth down for the git clone
 zinit ice depth=1; zinit light romkatv/powerlevel10k
@@ -222,3 +222,12 @@ bindkey '^n' history-search-forward
 PATH=~/.console-ninja/.bin:$PATH
 # Created by `pipx` on 2024-09-10 14:38:35
 export PATH="$PATH:/Users/Dale.Bishop/.local/bin"
+
+
+# BEGIN opam configuration
+# This is useful if you're using opam as it adds:
+#   - the correct directories to the PATH
+#   - auto-completion for the opam binary
+# This section can be safely removed at any time if needed.
+[[ ! -r '/Users/dale.bishop/.opam/opam-init/init.zsh' ]] || source '/Users/dale.bishop/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null
+# END opam configuration

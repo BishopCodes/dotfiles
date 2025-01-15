@@ -21,74 +21,84 @@
 
         nixpkgs.config.allowUnfree = true;
 
-        environment.systemPackages =
+        environment.systemPackages = with pkgs;
           [
-            pkgs.mkalias
-            pkgs.neovim
-            pkgs.obsidian # requires allowUnfree
-            pkgs.tmux
-            pkgs.fira-code
-            pkgs.raycast
-            pkgs.clang-tools
-            pkgs.cmake
-            pkgs.go
-            pkgs.gotools
-            pkgs.golangci-lint
-            pkgs.lua-language-server
-            pkgs.rustup
-            pkgs.rustfmt
-            pkgs.rust-analyzer
-            pkgs.sqlc
-            pkgs.stylua
-            pkgs.tailwindcss
-            pkgs.tailwindcss-language-server
-            pkgs.zoxide
-            pkgs.git
-            pkgs.nil
-            pkgs.air
-            pkgs.awscli
-            pkgs.opentofu
-            pkgs.tflint
-            pkgs.ripgrep
-            pkgs.stow
-            pkgs.zig
-            pkgs.zls
-            pkgs.lldb
-            pkgs.dotnet-sdk_8
-            pkgs.omnisharp-roslyn
-            pkgs.mono
-            pkgs.msbuild
-            pkgs.gcc
-            pkgs.maven
-            pkgs.jdk
-            pkgs.kotlin
-            pkgs.zlib
-            pkgs.pulumi-bin
-            pkgs.nodejs
-            pkgs.jq
-            pkgs.kubectl
-            pkgs.python3
-            pkgs.openssl
-            pkgs.spellcheck
-            pkgs.bun
-            pkgs.sdkmanager
-            pkgs.eza
-            pkgs.bat
-            pkgs.podman
-            pkgs.podman-desktop
-            pkgs.podman-compose
-            pkgs.soapui
-            pkgs.dbeaver-bin
-            pkgs.obs-studio
-            pkgs.keycastr
-            pkgs.keymapp
-            pkgs.ollama
-            pkgs.localstack
-            pkgs.keepassxc
-            pkgs.keystore-explorer
+            mkalias
+            neovim
+            vimPlugins.blink-cmp
+            obsidian # requires allowUnfree
+            tmux
+            fira-code
+            raycast
+            clang-tools
+            cmake
+            go
+            lua-language-server
+            rustup
+            rustc
+            cargo
+            rustfmt
+            rust-analyzer
+            sqlc
+            stylua
+            tailwindcss
+            tailwindcss-language-server
+            zoxide
+            git
+            nil
+            air
+            awscli
+            opentofu
+            tflint
+            ripgrep
+            stow
+            zig
+            zls
+            lldb
+            dotnet-sdk_8
+            omnisharp-roslyn
+            maven
+            jdk
+            kotlin
+            zlib
+            pulumi-bin
+            nodejs
+            jq
+            kubectl
+            python3
+            openssl
+            bun
+            eza
+            bat
+            podman
+            podman-desktop
+            podman-compose
+            #soapui
+            dbeaver-bin
+            #obs-studio
+            keycastr
+            #keymapp
+            ollama
+            ocaml
+            opam
+            localstack
+            keepassxc
+            keystore-explorer
+            zsh-autosuggestions
+            fzf
+            pkg-config
+            zinit
+            spotify
             # https://www.insta360.com/download/insta360-link2
             # https://www.elgato.com/us/en/s/downloads
           ];
+
+
+        environment.variables = {
+          # RUSTUP_HOME = "$HOME/.rustup";
+          # CARGO_HOME = "$HOME/.cargo";
+          FLAKE = "$HOME/dotfiles/nix";
+        };
 
         homebrew = {
           enable = true;
@@ -96,8 +106,9 @@
             "mas"
             "stow"
             "sketchybar"
-            "spotify"
-            "stow"
+          ];
+          taps = [
+            "FelixKratz/formulae"
           ];
           casks = [
             "ghostty"
@@ -124,7 +135,7 @@
               pathsToLink = "/Applications";
             };
           in
-          pkgs.lib.mkForce ''
+            pkgs.lib.mkForce ''
             # Set up applications.
             echo "setting up /Applications..." >&2
             rm -rf /Applications/Nix\ Apps
@@ -133,17 +144,47 @@
             while read -r src; do
               app_name=$(basename "$src")
               echo "copying $src" >&2
-                      ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
+              ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
             done
-          '';
+            '';
+        #
+        #       home-manager.backupFileExtension = "backup";
+        #         home-manager.useGlobalPkgs = true;
+        # home-manager.useUserPackages = true;
 
-        # home-manager.backupFileExtension = "backup";
-        nix.configureBuildUsers = true;
+
+        # nix.configureBuildUsers = true;
         nix.useDaemon = true;
 
         system.defaults = {
           # mynixos.org
-          dock.autohide = true;
+          dock.autohide = false;
+          finder.FXPreferredViewStyle = "clmv";
+          finder.AppleShowAllExtensions = true;
+          dock.persistent-apps = [
+            "/System/Applications/Calendar.app"
+          ];
+        };
+
+        system.defaults.CustomUserPreferences = {
+          NSGlobalDomain = {
+            AppleInterfaceStyle = "Dark";
+            WebKitDeveloperExtras = true;
+            "com.apple.swipescrolldirection" = false;
+          };
+          "com.apple.screencapture" = {
+            location = "clipboard";
+            type = "png";
+          };
+          "com.apple.SoftwareUpdate" = {
+            AutomaticCheckEnabled = true;
+            # Check for software updates daily, not just once per week
+            ScheduleFrequency = 1;
+            # Download newly available updates in background
+            AutomaticDownload = 1;
+            # Install System data files & security updates
+            CriticalUpdateInstall = 1;
+          };
         };
 
         # Auto upgrade nix package and the daemon service
@@ -164,11 +205,13 @@
         # $ darwin-rebuild changelog
         system.stateVersion = 5;
 
+        # security.pam.enableSudoTouchIdAuth = true;
+
         # The platform the configuration will be used on.
         nixpkgs.hostPlatform = "aarch64-darwin";
       };
     in
-    {
+      {
       # Build darwin flake using:
       # $ darwin-rebuild build --flake .#simple
       darwinConfigurations."work" = nix-darwin.lib.darwinSystem {
@@ -177,17 +220,18 @@
           # home-manager.darwinModules.home-manager {
           #   home-manager.useGlobalPkgs = true;
           #   home-manager.useUserPackages = true;
-          #   home-manager.users.Dale.Bishop = {
-          #     home.file = {
-          #       ".zshrc".source =  ~/dotfiles/.zshrc;
-          #       ".config/tmux.conf".source = ~/dotfiles/.config/tmux/tmux.conf;
-          #       ".config/aerorospace/aerospace.toml".source = ~/dotfiles/.config/aerospace/aerospace.toml;
-          #       ".config/ghostty/config".soruce = ~/dotfiles/.config/ghostty/config;
-          #       ".config/borders/boardersrc".source = ~/dotfiles/.config/borders/bordersrc;
-          #       ".config/nvim".source = ~/dotfiles/.config/nvim;
-          #       ".config/sketchybar/sketchybarrc".source = ~/dotfiles/.config/sketchybar/sketchybarrc;
-          #     };
-          #   };
+          # home-manager.users."Dale.Bishop" = import ./home.nix;
+          #   # home-manager.users.Dale.Bishop = {
+          #   #   home.file = {
+          #   #     ".zshrc".source =  ~/dotfiles/.zshrc;
+          #   #     ".config/tmux.conf".source = ~/dotfiles/.config/tmux/tmux.conf;
+          #   #     ".config/aerorospace/aerospace.toml".source = ~/dotfiles/.config/aerospace/aerospace.toml;
+          #   #     ".config/ghostty/config".soruce = ~/dotfiles/.config/ghostty/config;
+          #   #     ".config/borders/boardersrc".source = ~/dotfiles/.config/borders/bordersrc;
+          #   #     ".config/nvim".source = ~/dotfiles/.config/nvim;
+          #   #     ".config/sketchybar/sketchybarrc".source = ~/dotfiles/.config/sketchybar/sketchybarrc;
+          #   #   };
+          #   # };
           # }
           nix-homebrew.darwinModules.nix-homebrew
           {

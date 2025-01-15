@@ -231,3 +231,5 @@ export PATH="$PATH:/Users/Dale.Bishop/.local/bin"
 # This section can be safely removed at any time if needed.
 [[ ! -r '/Users/dale.bishop/.opam/opam-init/init.zsh' ]] || source '/Users/dale.bishop/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null
 # END opam configuration
+
+export GPG_TTY=$(tty)

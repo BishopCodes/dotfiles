@@ -23,72 +23,73 @@
 
         environment.systemPackages = with pkgs;
           [
-            mkalias
-            neovim
-            vimPlugins.blink-cmp
-            obsidian # requires allowUnfree
-            tmux
-            fira-code
-            raycast
+            #keymapp
+            #obs-studio
+            #soapui
+            air
+            awscli
+            bat
+            bun
+            cargo
             clang-tools
             cmake
+            dbeaver-bin
+            dotnet-sdk_8
+            eza
+            fira-code
+            fzf
+            git
+            gnupg
             go
+            jdk
+            jq
+            keepassxc
+            keycastr
+            keystore-explorer
+            kotlin
+            kubectl
+            lldb
+            localstack
             lua-language-server
-            rustup
-            rustc
-            cargo
-            rustfmt
+            maven
+            mkalias
+            neovim
+            nil
+            nodejs
+            obsidian # requires allowUnfree
+            ocaml
+            ollama
+            omnisharp-roslyn
+            opam
+            openssl
+            opentofu
+            pkg-config
+            podman
+            podman-compose
+            podman-desktop
+            pulumi-bin
+            python3
+            raycast
+            ripgrep
             rust-analyzer
+            rustc
+            rustfmt
+            rustup
+            spotify
             sqlc
+            stow
             stylua
             tailwindcss
             tailwindcss-language-server
-            zoxide
-            git
-            nil
-            air
-            awscli
-            opentofu
             tflint
-            ripgrep
-            stow
+            tmux
+            vimPlugins.blink-cmp
             zig
-            zls
-            lldb
-            dotnet-sdk_8
-            omnisharp-roslyn
-            maven
-            jdk
-            kotlin
-            zlib
-            pulumi-bin
-            nodejs
-            jq
-            kubectl
-            python3
-            openssl
-            bun
-            eza
-            bat
-            podman
-            podman-desktop
-            podman-compose
-            #soapui
-            dbeaver-bin
-            #obs-studio
-            keycastr
-            #keymapp
-            ollama
-            ocaml
-            opam
-            localstack
-            keepassxc
-            keystore-explorer
-            zsh-autosuggestions
-            fzf
-            pkg-config
             zinit
-            spotify
+            zlib
+            zls
+            zoxide
+            zsh-autosuggestions
             # https://www.insta360.com/download/insta360-link2
             # https://www.elgato.com/us/en/s/downloads
           ];

@@ -1,3 +1,4 @@
+# https://mac.install.guide/terminal/zshrc-zprofile
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -5,44 +6,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Homebrew reference
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
-# SDKMan
-# export SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
-# [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
-
-### Paths ###
-export PATH="$PATH:$HOME/.local/bin"
-
-# Node version manager
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-
-# ninja for vscode
-export PATH="$HOME/.console-ninja/.bin:$PATH"
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-# pnpm
-export PNPM_HOME="$HOME/Library/pnpm"
-export PATH="$PNPM_HOME:$PATH"
-
-# go
-export GOPATH="$HOME/go"
-export PATH="$PATH:${GOPATH}/bin"
-
-# Tmuxifier
-export PATH="$HOME/.tmuxifier/bin:$PATH"
-export EDITOR=/opt/homebrew/bin/nvim
-
-# Add .NET Core SDK tools
-export PATH="$PATH:$HOME/.dotnet/tools"
-
-# Lua langage server
-export PATH="$PATH:/opt/homebrew/bin/lua-language-server"
 
 # ZSH Autosuggest
 # source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -60,7 +23,6 @@ alias as=aerospace
 alias asfzf="aerospace list-windows --all | fzf --bind 'enter:execute(bash -c \"aerospace focus --window-id {1}\")+abort'"
 
 # config shortcuts
-alias vscode="/Applications/Visual\ Studio\ Code.app/contents/Resources/app/bin/code"
 alias zshconfig="nvim ~/.zshrc"
 alias zshsource="source ~/.zshrc"
 alias projects="cd ~/projects"

@@ -5,15 +5,13 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
     # home-manager = {
     #   url = "github:nix-community/home-manager";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew }:
-    # outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew, home-manager }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, ...}:
     let
       configuration = { pkgs, config, ... }: {
         # List packages installed in system profile. To search by name, run:
@@ -24,7 +22,7 @@
         environment.systemPackages = with pkgs;
           [
             #keymapp
-            #obs-studio
+            # obs-studio
             #soapui
             air
             awscli
@@ -64,6 +62,8 @@
             openssl
             opentofu
             pkg-config
+            dive
+            podman-tui
             podman
             podman-compose
             podman-desktop
@@ -77,51 +77,60 @@
             rustup
             spotify
             sqlc
-            stow
             stylua
             tailwindcss
             tailwindcss-language-server
             tflint
             tmux
-            vimPlugins.blink-cmp
             zig
             zinit
             zlib
             zls
             zoxide
             zsh-autosuggestions
+            lazygit
+            mas
+            stow
+            sketchybar
+            spacectl
+            # ghostty # Broken package currently
+            aerospace
+            fnm # Replacement for node version manager
             # https://www.insta360.com/download/insta360-link2
             # https://www.elgato.com/us/en/s/downloads
           ];
 
 
         environment.variables = {
-          # RUSTUP_HOME = "$HOME/.rustup";
-          # CARGO_HOME = "$HOME/.cargo";
           FLAKE = "$HOME/dotfiles/nix";
         };
 
         homebrew = {
           enable = true;
           brews = [
-            "mas"
-            "stow"
-            "sketchybar"
+            # "mas"
+            # "stow"
+            # "sketchybar"
+            "odpi"
+            "instantclient-basic"
+            "instantclient-sqlplus"
+            # "spacelift-io/spacelift/spacectl"
           ];
           taps = [
-            "FelixKratz/formulae"
+            # "InstantClientTap/instantclient"
           ];
           casks = [
             "ghostty"
-            "nikitabobko/tap/aerospace"
+            # "nikitabobko/tap/aerospace"
           ];
           masApps = {
             # "FriendlyName" = "AppleAppStoreAppId"
           };
           # Will remove anything not declared here
-          # onActivation.cleanup = "zap";
+          onActivation.cleanup = "zap";
           onActivation.autoUpdate = true;
           onActivation.upgrade = true;
+          brewPrefix = "/opt/workbrew/bin";
         };
 
         fonts.packages = [
@@ -147,12 +156,17 @@
               echo "copying $src" >&2
               ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
             done
-            '';
-        #
-        #       home-manager.backupFileExtension = "backup";
-        #         home-manager.useGlobalPkgs = true;
-        # home-manager.useUserPackages = true;
-
+            # Podman desktop config
+            USER_HOME=$(eval echo "~dale.bishop")
+            CONFIG_DIR="$USER_HOME/.local/share/containers/podman-desktop/configuration"
+            CONFIG_FILE="$CONFIG_DIR/settings.json"
+            # ${pkgs.lib.getBin pkgs.podman}/bin/podman
+            TMP_CONFIG_FILE=$(mktemp)
+            mkdir -p "$CONFIG_DIR"
+            jq '.["podman.binary.path"] = "/run/current-system/sw/bin/podman"' "$CONFIG_FILE" > "$TMP_CONFIG_FILE"
+            mv "$TMP_CONFIG_FILE" "$CONFIG_FILE"
+            chown dale.bishop "$CONFIG_FILE"
+        '';
 
         # nix.configureBuildUsers = true;
         nix.useDaemon = true;
@@ -193,7 +207,9 @@
         # nix.package = pkgs.nix;}
 
         # Necessary for using flakes on this system.
-        nix.settings.experimental-features = "nix-command flakes";
+        nix.settings = {
+          experimental-features = "nix-command flakes";
+        };
 
         # Enable alternative shell support in nix-darwin.
         programs.zsh.enable = true;
@@ -218,31 +234,6 @@
       darwinConfigurations."work" = nix-darwin.lib.darwinSystem {
         modules = [
           configuration
-          # home-manager.darwinModules.home-manager {
-          #   home-manager.useGlobalPkgs = true;
-          #   home-manager.useUserPackages = true;
-          # home-manager.users."Dale.Bishop" = import ./home.nix;
-          #   # home-manager.users.Dale.Bishop = {
-          #   #   home.file = {
-          #   #     ".zshrc".source =  ~/dotfiles/.zshrc;
-          #   #     ".config/tmux.conf".source = ~/dotfiles/.config/tmux/tmux.conf;
-          #   #     ".config/aerorospace/aerospace.toml".source = ~/dotfiles/.config/aerospace/aerospace.toml;
-          #   #     ".config/ghostty/config".soruce = ~/dotfiles/.config/ghostty/config;
-          #   #     ".config/borders/boardersrc".source = ~/dotfiles/.config/borders/bordersrc;
-          #   #     ".config/nvim".source = ~/dotfiles/.config/nvim;
-          #   #     ".config/sketchybar/sketchybarrc".source = ~/dotfiles/.config/sketchybar/sketchybarrc;
-          #   #   };
-          #   # };
-          # }
-          nix-homebrew.darwinModules.nix-homebrew
-          {
-            nix-homebrew = {
-              enable = true;
-              enableRosetta = true; # Apple Silicon
-              user = "Dale.Bishop";
-              autoMigrate = true; # If already install on system
-            };
-          }
         ];
       };
       # Expose the package set, including overlays, for convenience.

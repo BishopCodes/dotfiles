@@ -89,6 +89,7 @@
             zoxide
             zsh-autosuggestions
             lazygit
+            lazydocker
             mas
             stow
             sketchybar

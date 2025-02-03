@@ -190,7 +190,3 @@ bindkey '^n' history-search-forward
 # END opam configuration
 
 export GPG_TTY=$(tty)
-
-. "$HOME/.local/bin/env"
-
-export GPG_TTY=$(tty)

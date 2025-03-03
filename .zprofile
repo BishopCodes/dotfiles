@@ -11,6 +11,9 @@ export PATH="$PATH:$HOME/.local/bin"
 ### NIX ###
 # export PATH="/run/current-system/sw/bin:$PATH"
 
+# Load completions
+autoload -U compinit && compinit -u
+
 # NVM Replacement
 eval "$(fnm env --use-on-cd --shell zsh)"
 

@@ -69,10 +69,15 @@ alias vim=nvim
 alias docker=podman
 alias docker-compose=podman-compose
 
+alias tmux="tmux -f ~/.config/tmux/tmux.conf"
+
+
 alias server='python3 -m http.server 4445'
 alias tunnel='ngrok http 4445'
 
 alias seshc='sesh connect $(sesh list | fzf)'
+
+alias rebuildnix='sudo -E $(which darwin-rebuild) switch -L --flake ~/dotfiles/.config/nix#work --show-trace'
 
 fzjq() {
   local input jq_query
@@ -120,9 +125,6 @@ zinit light joshskidmore/zsh-fzf-history-search
 zinit snippet OMZP::aws
 zinit snippet OMZP::command-not-found
 zinit snippet OMZP::git
-
-# Load completions
-autoload -U compinit && compinit
 
 # Replay cache completions
 zinit cdreplay -q

@@ -117,3 +117,16 @@ vim.keymap.set("n", "<leader>cD", function()
 end, { noremap = true, silent = true, desc = "Copy diagnostic to clipboard" })
 vim.keymap.set("n", "gq", "<cmd>lua vim.lsp.buf.format()<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>rn", ":IncRename ", { desc = "Rename" })
+vim.keymap.set(
+  "n",
+  "<leader>Sey",
+  ":call feedkeys(':%%s/^\\s*\\([^=]*\\)=\\(.*\\)/  - name: \\1\\r    value: \\2/', 'n')<CR>",
+  { desc = "Convert env lines to YAML", noremap = true, silent = false }
+)
+
+vim.keymap.set(
+  "n",
+  "<leader>fo",
+  ":!open -R %<CR>",
+  { desc = "Open buffer in finder", noremap = true, silent = false }
+)

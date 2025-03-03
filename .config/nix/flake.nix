@@ -9,6 +9,7 @@
     #   url = "github:nix-community/home-manager";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
+    ghostty = { url = "github:ghostty-org/ghostty"; };
   };
 
   outputs = inputs@{ self, nix-darwin, nixpkgs, ...}:
@@ -21,8 +22,14 @@
 
         environment.systemPackages = with pkgs;
           [
-            #keymapp
+            aerospace
+            # Broken package currently
+            # ghostty
+            # https://www.elgato.com/us/en/s/downloads
+            # https://www.insta360.com/download/insta360-link2
             # obs-studio
+            sketchybar
+            #keymapp
             #soapui
             air
             awscli
@@ -32,13 +39,18 @@
             clang-tools
             cmake
             dbeaver-bin
+            dive
             dotnet-sdk_8
+            dotenvx
             eza
+            fd
             fira-code
+            fnm # Replacement for node version manager
             fzf
             git
             gnupg
             go
+            hadolint
             jdk
             jq
             keepassxc
@@ -46,9 +58,12 @@
             keystore-explorer
             kotlin
             kubectl
+            lazydocker
+            lazygit
             lldb
-            localstack
+            # localstack
             lua-language-server
+            mas
             maven
             mkalias
             neovim
@@ -62,11 +77,10 @@
             openssl
             opentofu
             pkg-config
-            dive
-            podman-tui
             podman
             podman-compose
             podman-desktop
+            podman-tui
             pulumi-bin
             python3
             raycast
@@ -75,30 +89,23 @@
             rustc
             rustfmt
             rustup
+            spacectl
             spotify
             sqlc
+            stow
             stylua
             tailwindcss
             tailwindcss-language-server
+            terraform
             tflint
             tmux
+            yarn
             zig
             zinit
             zlib
             zls
             zoxide
             zsh-autosuggestions
-            lazygit
-            lazydocker
-            mas
-            stow
-            sketchybar
-            spacectl
-            # ghostty # Broken package currently
-            aerospace
-            fnm # Replacement for node version manager
-            # https://www.insta360.com/download/insta360-link2
-            # https://www.elgato.com/us/en/s/downloads
           ];
 
 
@@ -112,20 +119,21 @@
             # "mas"
             # "stow"
             # "sketchybar"
-            "odpi"
+            # "odpi"
             "instantclient-basic"
             "instantclient-sqlplus"
+            "docker-slim"
             # "spacelift-io/spacelift/spacectl"
           ];
           taps = [
-            # "InstantClientTap/instantclient"
+            "InstantClientTap/instantclient"
           ];
           casks = [
             "ghostty"
             # "nikitabobko/tap/aerospace"
           ];
           masApps = {
-            # "FriendlyName" = "AppleAppStoreAppId"
+            "Windows App" = 1295203466;
           };
           # Will remove anything not declared here
           onActivation.cleanup = "zap";
@@ -170,7 +178,8 @@
         '';
 
         # nix.configureBuildUsers = true;
-        nix.useDaemon = true;
+        # nix.useDaemon = true;
+        nix.enable = false;
 
         system.defaults = {
           # mynixos.org
@@ -179,6 +188,10 @@
           finder.AppleShowAllExtensions = true;
           dock.persistent-apps = [
             "/System/Applications/Calendar.app"
+            ""
+            "/Applications/Ghostty.app"
+            "/Applications/Nix Apps/dbeaver.app"
+            "/Applications/Nix Apps/Spotify.app"
           ];
         };
 
@@ -204,7 +217,10 @@
         };
 
         # Auto upgrade nix package and the daemon service
-        services.nix-daemon.enable = true;
+        # services.nix-daemon.enable = true;
+        # Built in services
+        # services.aerospace.enable = true;
+        # services.sketchybar.enable = true;
         # nix.package = pkgs.nix;}
 
         # Necessary for using flakes on this system.
@@ -214,6 +230,13 @@
 
         # Enable alternative shell support in nix-darwin.
         programs.zsh.enable = true;
+        programs.tmux.enable = true;
+        programs.tmux.enableFzf = true;
+        programs.tmux.enableVim = true;
+        programs.zsh.enableFzfGit = true;
+        programs.zsh.enableFzfHistory = true;
+        programs.zsh.enableFzfCompletion = true;
+        programs.zsh.enableGlobalCompInit = true;
         # programs.fish.enable = true;
 
         # Set Git commit hash for darwin-version.
@@ -227,6 +250,8 @@
 
         # The platform the configuration will be used on.
         nixpkgs.hostPlatform = "aarch64-darwin";
+       
+        launchd.daemons.nixsudo.serviceConfig.GroupName = "wheel";
       };
     in
       {

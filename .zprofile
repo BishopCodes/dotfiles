@@ -1,3 +1,6 @@
+# Load completions
+autoload -U compinit && compinit -u
+
 # Homebrew reference using workbrew needs the disable option as well
 eval "$(/opt/workbrew/bin/brew shellenv)"
 
@@ -10,9 +13,6 @@ export PATH="$PATH:$HOME/.local/bin"
 
 ### NIX ###
 # export PATH="/run/current-system/sw/bin:$PATH"
-
-# Load completions
-autoload -U compinit && compinit -u
 
 # NVM Replacement
 eval "$(fnm env --use-on-cd --shell zsh)"
@@ -48,4 +48,7 @@ export PATH="$PATH:/run/current-system/sw/bin/lua-language-server"
 
 # Workbrew
 export HOMEBREW_BREW_WRAPPER=/opt/workbrew/bin/brew
+
+# DOCKER for PODMAN
+export DOCKER_HOST=$(podman system connection ls --format "{{.URI}}" | grep podman-machine-default)
 

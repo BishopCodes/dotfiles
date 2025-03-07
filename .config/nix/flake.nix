@@ -9,7 +9,6 @@
     #   url = "github:nix-community/home-manager";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
-    ghostty = { url = "github:ghostty-org/ghostty"; };
   };
 
   outputs = inputs@{ self, nix-darwin, nixpkgs, ...}:
@@ -42,7 +41,10 @@
             dive
             dotnet-sdk_8
             dotenvx
+            duf
+            dust
             eza
+            fastfetch
             fd
             fira-code
             fnm # Replacement for node version manager
@@ -69,7 +71,17 @@
             neovim
             nil
             nodejs
-            obsidian # requires allowUnfree
+            # New package broken leaving to fix later
+            # (obsidian.overrideAttrs (_: { 
+            #   version = "1.8.7";
+            #   src = fetchFromGitHub {
+            #     owner = "obsidianmd";
+            #     repo = "obsidian-releases";
+            #     rev = "8a4cc30ac573e30910d294d602f6fc8fe29d37d2";
+            #     sha256 = "sha256-jrvzwmdqtl/dMLOu9Q2sTLPwIIpbJNKKWKt0AtagRkE=";
+            #   };
+            # }))
+            # obsidian # requires allowUnfree
             ocaml
             ollama
             omnisharp-roslyn
@@ -98,6 +110,7 @@
             tailwindcss-language-server
             terraform
             tflint
+            tldr
             tmux
             yarn
             zig

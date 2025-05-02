@@ -1,3 +1,7 @@
+# Load completions
+# autoload -U compinit && compinit -u
+ZSH_DISABLE_COMPFIX="true"
+
 # https://mac.install.guide/terminal/zshrc-zprofile
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -39,7 +43,7 @@ alias gitconfig="nvim ~/.gitconfig"
 # exa
 alias la=tree
 alias ls="exa"
-alias ll="exa -alh"
+alias ll="exa --long --header --icons --git --git-ignore --all --grid"
 alias tree="exa --tree"
 
 # bat
@@ -97,8 +101,9 @@ fzjq() {
 }
 
 ### ZINIT ###
-ZINIT_HOME=$(nix eval --raw nixpkgs#zinit.outPath)
+# ZINIT_HOME=$(sudo nix eval --raw nixpkgs#zinit.outPath)
 # ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+ZINIT_HOME=$(nix-store --query --requisites /run/current-system/sw | awk '/zinit/ && !/man/ {print; exit}')
 
 # Grab Zinit if we dont have it already
 # if [ ! -d "$ZINIT_HOME" ]; then

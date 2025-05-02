@@ -3,3 +3,4 @@ background-opacity = 0.9
 background-blur-radius = 10
 macos-titlebar-style = hidden
 font-size = 20
+# command = zsh --login -c "if command -v tmux >/dev/null 2>&1; then tmux attach || tmux; else zsh; fi"

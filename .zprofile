@@ -1,5 +1,5 @@
 # Load completions
-autoload -U compinit && compinit -u
+autoload -U compinit && compinit -i
 
 # Homebrew reference using workbrew needs the disable option as well
 eval "$(/opt/workbrew/bin/brew shellenv)"
@@ -12,7 +12,7 @@ eval "$(/opt/workbrew/bin/brew shellenv)"
 export PATH="$PATH:$HOME/.local/bin"
 
 ### NIX ###
-# export PATH="/run/current-system/sw/bin:$PATH"
+export PATH="/run/current-system/sw/bin:$PATH"
 
 # NVM Replacement
 eval "$(fnm env --use-on-cd --shell zsh)"

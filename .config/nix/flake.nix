@@ -31,7 +31,8 @@
             #keymapp
             #soapui
             air
-            awscli
+            asdf
+            awscli2
             bat
             bun
             cargo
@@ -50,10 +51,15 @@
             fnm # Replacement for node version manager
             fzf
             git
+            gitflow
             gnupg
             go
+            # handbrake
             hadolint
+            # helm
+            istioctl
             jdk
+            jujutsu
             jq
             keepassxc
             keycastr
@@ -62,6 +68,8 @@
             kubectl
             lazydocker
             lazygit
+            lazyjj
+            # libpq
             lldb
             # localstack
             lua-language-server
@@ -93,9 +101,12 @@
             podman-compose
             podman-desktop
             podman-tui
+            postgresql_16
             pulumi-bin
             python3
+            pqrs
             raycast
+            redocly
             ripgrep
             rust-analyzer
             rustc
@@ -113,6 +124,7 @@
             tldr
             tmux
             yarn
+            xh
             zig
             zinit
             zlib
@@ -136,6 +148,9 @@
             "instantclient-basic"
             "instantclient-sqlplus"
             "docker-slim"
+            "handbrake"
+            "helm"
+            "watch"
             # "spacelift-io/spacelift/spacectl"
           ];
           taps = [
@@ -143,6 +158,7 @@
           ];
           casks = [
             "ghostty"
+              "obs"
             # "nikitabobko/tap/aerospace"
           ];
           masApps = {

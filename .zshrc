@@ -82,6 +82,7 @@ alias tunnel='ngrok http 4445'
 alias seshc='sesh connect $(sesh list | fzf)'
 
 alias rebuildnix='sudo --preserve-env=HOME $(which darwin-rebuild) switch -L --flake ~/dotfiles/.config/nix#work --show-trace'
+alias upgradenix='nix flake update --flake ~/dotfiles/.config/nix'
 
 fzjq() {
   local input jq_query

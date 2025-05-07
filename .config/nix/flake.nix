@@ -5,13 +5,14 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+    flake-utils.url = "github:numtide/flake-utils";
     # home-manager = {
     #   url = "github:nix-community/home-manager";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, ...}:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, flake-utils, ... }:
     let
       configuration = { pkgs, config, ... }: {
         # List packages installed in system profile. To search by name, run:
@@ -35,7 +36,7 @@
             awscli2
             bat
             bun
-            cargo
+            # cargo
             clang-tools
             cmake
             dbeaver-bin
@@ -50,6 +51,7 @@
             fira-code
             fnm # Replacement for node version manager
             fzf
+            gcc
             git
             gitflow
             gnupg
@@ -108,9 +110,9 @@
             raycast
             redocly
             ripgrep
-            rust-analyzer
-            rustc
-            rustfmt
+            # rust-analyzer
+            # rustc
+            # rustfmt
             rustup
             spacectl
             spotify
@@ -122,7 +124,7 @@
             terraform
             tflint
             tldr
-            tmux
+            # tmux
             yarn
             xh
             zig
@@ -210,38 +212,62 @@
         # nix.useDaemon = true;
         nix.enable = false;
 
+        # https://mynixos.com/nix-darwin/options/system.defaults
         system.defaults = {
-          # mynixos.org
-          dock.autohide = false;
-          finder.FXPreferredViewStyle = "clmv";
-          finder.AppleShowAllExtensions = true;
-          dock.persistent-apps = [
-            "/System/Applications/Calendar.app"
-            ""
-            "/Applications/Ghostty.app"
-            "/Applications/Nix Apps/dbeaver.app"
-            "/Applications/Nix Apps/Spotify.app"
-          ];
-        };
+          dock = {
+            autohide = false;
+            persistent-apps = [
+              {
+                app = "/System/Applications/Calendar.app";
+              }
+              {
+                spacer = {
+                  small = false;
+                };             
+              }
+              {
+                app = "/Applications/Ghostty.app";
+              }
+              {
+                app="/Applications/Nix Apps/dbeaver.app";
+              }
+              {
+                app= "/Applications/Nix Apps/Spotify.app";
+              }
+            ];
+          };
 
-        system.defaults.CustomUserPreferences = {
+          finder = {
+            FXPreferredViewStyle = "clmv";
+            AppleShowAllExtensions = true;
+          };
+
           NSGlobalDomain = {
             AppleInterfaceStyle = "Dark";
-            WebKitDeveloperExtras = true;
             "com.apple.swipescrolldirection" = false;
           };
-          "com.apple.screencapture" = {
-            location = "clipboard";
-            type = "png";
+
+          CustomUserPreferences = {
+            "com.apple.screencapture" = {
+              location = "clipboard";
+              type = "png";
+            };
           };
-          "com.apple.SoftwareUpdate" = {
-            AutomaticCheckEnabled = true;
-            # Check for software updates daily, not just once per week
-            ScheduleFrequency = 1;
-            # Download newly available updates in background
-            AutomaticDownload = 1;
-            # Install System data files & security updates
-            CriticalUpdateInstall = 1;
+
+          CustomSystemPreferences = {
+            "com.apple.Safari" = {
+              "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" =
+                true;
+            };
+            "com.microsoft.rdc.macos".ClientSettings__EnforceCredSSPSupport = 0;
+            "com.apple.SoftwareUpdate" = {
+              AutomaticCheckEnabled = true;
+              ScheduleFrequency = 1;
+              AutomaticDownload = 1;
+              CriticalUpdateInstall = 1;
+            };
+            "com.apple.dock".ExposeGroupApps = false;
+            "com.apple.spaces".SpansDisplays = true;
           };
         };
 
@@ -282,16 +308,44 @@
        
         launchd.daemons.nixsudo.serviceConfig.GroupName = "wheel";
       };
-    in
-      {
-      # Build darwin flake using:
-      # $ darwin-rebuild build --flake .#simple
+
+    in flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+        overrides = (builtins.fromTOML (builtins.readFile (self + "/rust-toolchain.toml")));
+      in {
+        # Add your devShell for Rust:
+        devShells.default = pkgs.mkShell rec {
+          nativeBuildInputs = [ pkgs.pkg-config ];
+          buildInputs = with pkgs; [
+            clang
+            llvmPackages.bintools
+            rustup
+          ];
+
+          RUSTC_VERSION = overrides.toolchain.channel;
+          LIBCLANG_PATH = pkgs.lib.makeLibraryPath [ pkgs.llvmPackages_latest.libclang.lib ];
+          shellHook = ''
+            export PATH=$PATH:''${CARGO_HOME:-~/.cargo}/bin
+            export PATH=$PATH:''${RUSTUP_HOME:-~/.rustup}/toolchains/$RUSTC_VERSION-x86_64-unknown-linux-gnu/bin/
+          '';
+
+          RUSTFLAGS = (builtins.map (a: ''-L ${a}/lib'') [ ]);
+          LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath (buildInputs ++ nativeBuildInputs);
+          BINDGEN_EXTRA_CLANG_ARGS =
+            (builtins.map (a: ''-I"${a}/include"'') [ pkgs.glibc.dev ])
+            ++ [
+              ''-I"${pkgs.llvmPackages_latest.libclang.lib}/lib/clang/${pkgs.llvmPackages_latest.libclang.version}/include"''
+              ''-I"${pkgs.glib.dev}/include/glib-2.0"''
+              ''-I${pkgs.glib.out}/lib/glib-2.0/include/''
+            ];
+        };
+      }
+    ) // {
+      # Add darwin system config at the top level
       darwinConfigurations."work" = nix-darwin.lib.darwinSystem {
-        modules = [
-          configuration
-        ];
+        modules = [ configuration ];
       };
-      # Expose the package set, including overlays, for convenience.
       darwinPackages = self.darwinConfigurations."work".pkgs;
     };
 }

@@ -52,3 +52,5 @@ export HOMEBREW_BREW_WRAPPER=/opt/workbrew/bin/brew
 # DOCKER for PODMAN
 export DOCKER_HOST=$(podman system connection ls --format "{{.URI}}" | grep podman-machine-default)
 
+# OpenSSL
+export OPENSSL_DIR=$(nix eval --raw nixpkgs#openssl.dev)

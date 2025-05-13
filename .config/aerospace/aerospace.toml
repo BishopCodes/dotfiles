@@ -1,13 +1,13 @@
 after-startup-command = [
-  'exec-and-forget sketchybar --reload',
-  'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0',
+  # 'exec-and-forget /run/current-system/sw/bin/sketchybar',
+  'exec-and-forget /run/current-system/sw/bin/borders active_color=0xfff7768e inactive_color=0xff7aa2f7 hidpi=on style=round width=6.0',
 ]
 
 # Notify Sketchybar about workspace change
 exec-on-workspace-change = [
   '/bin/bash',
   '-c',
-  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
+  '/run/current-system/sw/bin/sketchybar --reload --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
 ]
 
 # Start AeroSpace at login
@@ -51,6 +51,9 @@ automatically-unhide-macos-hidden-apps = false
 # check-further-callbacks = true
 # run = ['layout floating', 'move-node-to-workspace S']  # The callback itself
 
+# [exec.env-vars]
+# PATH = '/run/current-system/sw/bin/:${PATH}'
+
 [[on-window-detected]]
 if.app-name-regex-substring = 'finder'
 run = 'layout floating'
@@ -70,7 +73,7 @@ preset = 'qwerty'
 [gaps]
 outer.top = [
   # offset of 32 on internal display, because of notch (16" MPB)
-  { monitor.'built-in.*' = 16 },
+  { monitor.'built-in.*' = 48 },
   48,
 ]
 inner.horizontal = 24

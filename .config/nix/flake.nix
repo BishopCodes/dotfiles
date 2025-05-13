@@ -29,6 +29,7 @@
             # https://www.insta360.com/download/insta360-link2
             # obs-studio
             sketchybar
+            sketchybar-app-font
             #keymapp
             #soapui
             air
@@ -37,6 +38,7 @@
             bat
             bun
             # cargo
+            clang
             clang-tools
             cmake
             dbeaver-bin
@@ -60,6 +62,7 @@
             hadolint
             # helm
             istioctl
+            jankyborders
             jdk
             jujutsu
             jq
@@ -79,6 +82,7 @@
             maven
             mkalias
             neovim
+            libiconv
             nil
             nodejs
             # New package broken leaving to fix later
@@ -116,6 +120,7 @@
             rustup
             spacectl
             spotify
+            spotifyd
             sqlc
             stow
             stylua
@@ -208,11 +213,15 @@
             chown dale.bishop "$CONFIG_FILE"
         '';
 
+        # Limit with nix and sudo 
+        # Run manually launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/org.nixos.sketchybar.plist
+
         # nix.configureBuildUsers = true;
         # nix.useDaemon = true;
         nix.enable = false;
 
         # https://mynixos.com/nix-darwin/options/system.defaults
+        # https://nix-darwin.github.io/nix-darwin/manual/index.html
         system.defaults = {
           dock = {
             autohide = false;
@@ -229,10 +238,10 @@
                 app = "/Applications/Ghostty.app";
               }
               {
-                app="/Applications/Nix Apps/dbeaver.app";
+                app = "/Applications/Nix Apps/dbeaver.app";
               }
               {
-                app= "/Applications/Nix Apps/Spotify.app";
+                app = "/Applications/Nix Apps/Spotify.app";
               }
             ];
           };
@@ -245,6 +254,7 @@
           NSGlobalDomain = {
             AppleInterfaceStyle = "Dark";
             "com.apple.swipescrolldirection" = false;
+            NSWindowShouldDragOnGesture = true;
           };
 
           CustomUserPreferences = {

@@ -1,5 +1,5 @@
 # Load completions
-# autoload -U compinit && compinit -u
+ autoload -U compinit && compinit -u
 ZSH_DISABLE_COMPFIX="true"
 
 # https://mac.install.guide/terminal/zshrc-zprofile
@@ -84,6 +84,8 @@ alias seshc='sesh connect $(sesh list | fzf)'
 alias rebuildnix='sudo --preserve-env=HOME $(which darwin-rebuild) switch -L --flake ~/dotfiles/.config/nix#work --show-trace'
 alias upgradenix='nix flake update --flake ~/dotfiles/.config/nix'
 
+alias rec='asciinema rec'
+
 fzjq() {
   local input jq_query
   if [ -t 0 ]; then
@@ -99,6 +101,36 @@ fzjq() {
   
   # Run jq with the query on the input
   echo "$input" | jq "$jq_query"
+}
+
+# Secure export for things like AWS
+se() {
+  local line buffer
+  buffer="$(pbpaste)"
+
+  [[ "${buffer}" != *$'\n' ]] && buffer="${buffer}"$'\n'
+
+  print -rn -- "$buffer" | while IFS= read -r line; do
+    [[ -z "${line//[[:space:]]/}" ]] && continue
+
+    if [[ "$line" =~ "^export[[:space:]]+([A-Z0-9_]+)=(.+)" ]]; then
+      key="${match[1]}"
+      value="${match[2]}"
+
+      # Strip matching surrounding single or double quotes
+      if [[ "$value" == \"*\" && "$value" == *\" ]]; then
+        value="${value:1:-1}"
+      elif [[ "$value" == \'*\' && "$value" == *\' ]]; then
+        value="${value:1:-1}"
+      fi
+    
+
+      eval "export $key=$value"
+      echo "export $key=****"
+    else
+      echo "$line"
+    fi
+  done
 }
 
 ### ZINIT ###
@@ -134,6 +166,9 @@ zinit snippet OMZP::git
 
 # Replay cache completions
 zinit cdreplay -q
+
+# Masking 
+zinit light jgogstad/zsh-mask
 
 ### Styling ### 
 ## case-insensitive
@@ -198,3 +233,5 @@ bindkey '^n' history-search-forward
 # END opam configuration
 
 export GPG_TTY=$(tty)
+eval "$(/opt/workbrew/bin/brew shellenv)"
+eval "$(/opt/workbrew/bin/brew shellenv)"

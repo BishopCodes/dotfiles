@@ -71,11 +71,12 @@ preset = 'qwerty'
 #                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
 #                 See: https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-outer.top = [
-  # offset of 32 on internal display, because of notch (16" MPB)
-  { monitor.'built-in.*' = 48 },
-  48,
-]
+# outer.top = [
+#   # offset of 32 on internal display, because of notch (16" MPB)
+#   { monitor.'built-in.*' = 48 },
+#   48,
+# ]
+outer.top = 12
 inner.horizontal = 24
 inner.vertical = 24
 outer.left = 24

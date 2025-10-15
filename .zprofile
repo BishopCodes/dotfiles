@@ -1,5 +1,9 @@
 # Load completions
-autoload -U compinit && compinit -i
+autoload -U compinit && compinit -u
+
+# Workbrew
+# export HOMEBREW_BREW_WRAPPER=/opt/workbrew/bin/brew
+# export HOMEBREW_FORCE_BREW_WRAPPER=/opt/workbrew/bin/brew
 
 # Homebrew reference using workbrew needs the disable option as well
 eval "$(/opt/workbrew/bin/brew shellenv)"
@@ -16,10 +20,12 @@ export PATH="/run/current-system/sw/bin:$PATH"
 
 # NVM Replacement
 eval "$(fnm env --use-on-cd --shell zsh)"
+# eval "$(nodenv init - zsh)"
 
 # Oracle
 export ORACLE_HOME=$HOME/libs/instantclient_23_3
-export DYLD_LIBRARY_PATH=$HOME/libs/instantclient_23_3:$DYLD_LIBRARY_PATH
+# export DYLD_LIBRARY_PATH=$HOME/libs/instantclient_23_3:$DYLD_LIBRARY_PATH
+export DYLD_LIBRARY_PATH="${DYLD_LIBRARY_PATH}:$(nix eval --raw nixpkgs#libsixel)/lib"
 export LD_LIBRARY_PATH=$HOME/libs/instantclient_23_3:$LD_LIBRARY_PATH
 export TNS_ADMIN=$HOME/oracle/wallet
 export PATH=$HOME/libs/instantclient_23_3:$PATH
@@ -45,9 +51,6 @@ export PATH="$PATH:$HOME/.dotnet/tools"
 
 # Lua language server can use /opt/homebrew/bin/lua-language-server instead
 export PATH="$PATH:/run/current-system/sw/bin/lua-language-server"
-
-# Workbrew
-export HOMEBREW_BREW_WRAPPER=/opt/workbrew/bin/brew
 
 # DOCKER for PODMAN
 export DOCKER_HOST=$(podman system connection ls --format "{{.URI}}" | grep podman-machine-default)

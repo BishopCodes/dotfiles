@@ -27,8 +27,8 @@
     let
       system = "aarch64-darwin";
 
-      configuration = { pkgs, config, ... }:
-        # List packages installed in syste profile. To search by name, run:
+      configuration = { pkgs, config, ... }: 
+        # List packages installed in system profile. To search by name, run:
         # $ nix-env -qaP | grep wget
 
         # nixpkgs.config = {
@@ -55,92 +55,40 @@
             pkg_dir="$out/lib/node_modules/${pkgName}"
 
             if [ -d "$pkg_dir" ]; then
-            binField=$(node -p "let b=require('$pkg_dir/package.json').bin; typeof b === 'object' ? JSON.stringify(b) : b")
-            if [ ! -z "$binField" ]; then
-            echo "Discovered bin field: $binField"
-            if echo "$binField" | grep -q '{'; then
-            node <<EOF
-            const bins = require('$pkg_dir/package.json').bin;
-            const fs = require('fs');
-            const path = require('path');
-            for (const name in bins) {
+              binField=$(node -p "let b=require('$pkg_dir/package.json').bin; typeof b === 'object' ? JSON.stringify(b) : b")
+              if [ ! -z "$binField" ]; then
+                echo "Discovered bin field: $binField"
+                if echo "$binField" | grep -q '{'; then
+                  node <<EOF
+          const bins = require('$pkg_dir/package.json').bin;
+          const fs = require('fs');
+          const path = require('path');
+          for (const name in bins) {
             const target = path.resolve('$pkg_dir', bins[name]);
             const link = path.join('$out', 'bin', name);
             try {
-            if (!fs.existsSync(link)) {
-            fs.symlinkSync(target, link);
-            console.log('Linked', link, '→', target);
-            } else {
-            console.log('Skipped existing link:', link);
-            }
+              if (!fs.existsSync(link)) {
+                fs.symlinkSync(target, link);
+                console.log('Linked', link, '→', target);
+              } else {
+                console.log('Skipped existing link:', link);
+              }
             } catch (e) {
-            console.error('Failed to symlink:', link, '→', target);
-            console.error(e);
-            process.exit(1);
+              console.error('Failed to symlink:', link, '→', target);
+              console.error(e);
+              process.exit(1);
             }
-            }
-            EOF
-            else
-            binPath=$(node -p "require('$pkg_dir/package.json').bin")
-            cleanedPath=$(echo "$binPath" | sed 's|^\./||')
-            ln -s "$pkg_dir/$cleanedPath" "$out/bin/$(basename "$cleanedPath")"
+          }
+          EOF
+                else
+                  binPath=$(node -p "require('$pkg_dir/package.json').bin")
+                  cleanedPath=$(echo "$binPath" | sed 's|^\./||')
+                  ln -s "$pkg_dir/$cleanedPath" "$out/bin/$(basename "$cleanedPath")"
+                fi
+              fi
             fi
-            fi
-            fi
-            '';          
+          '';          
           };
-
-          # gtkLibs = with pkgs; [
-          #   glib
-          #   gobject-introspection
-          #   cairo
-          #   pango
-          #   gdk-pixbuf
-          #   harfbuzz
-          #   freetype
-          #   fontconfig
-          # ];
-
-      #     weasyprintBin = pkgs.stdenv.mkDerivation {
-      #       pname = "weasyprint-standalone";
-      #       version = "65.1";
-      #
-      #       src = pkgs.emptyDirectory;
-      #
-      #       buildInputs = gtkLibs ++ [
-      #         (pkgs.python311.withPackages (ps: with ps; [
-      #           ps.pip
-      #           ps.setuptools
-      #           ps.wheel
-      #         ]))
-      #       ];
-      #
-      #       installPhase = ''
-      # export HOME=$(mktemp -d)
-      # ${pkgs.python311.interpreter} -m venv $out/venv
-      # source $out/venv/bin/activate
-      #
-      # export DYLD_LIBRARY_PATH="${pkgs.lib.makeLibraryPath gtkLibs}:$DYLD_LIBRARY_PATH"
-      #
-      # pip install weasyprint==65.1
-      #
-      # mkdir -p $out/bin
-      # ln -s $out/venv/bin/weasyprint $out/bin/_weasyprint
-      #
-      # cat > $out/bin/weasyprint <<EOF
-      # #!/bin/sh
-      # export DYLD_LIBRARY_PATH="${pkgs.lib.makeLibraryPath gtkLibs}:\$DYLD_LIBRARY_PATH"
-      # exec "$out/bin/_weasyprint" "\$@"
-      # EOF
-      # chmod +x $out/bin/weasyprint
-      # '';
-      #
-      #       meta = {
-      #         description = "Standalone WeasyPrint 65.1 with GTK libs wrapped for macOS";
-      #         platforms = [ "aarch64-darwin" ];
-      #         license = pkgs.lib.licenses.bsd3;
-      #       };
-      #     };
           # workbrew broke things so managing it this way now
           myBrew = {
             brewPrefix = "/opt/workbrew";
@@ -153,7 +101,6 @@
               "helm"
               "watch"
               "gemini-cli"
-              "node-build"
               # "commitgenius"
             ];
             taps = [
@@ -172,12 +119,7 @@
         in { 
           environment.systemPackages = with pkgs;
             [
-              (npmGlobalPackage "oc")
-              # darwin.apple_sdk.frameworks.SystemConfiguration
-              # darwin.apple_sdk.frameworks.CoreFoundation
-              # darwin.apple_sdk.frameworks.Security
               aerospace
-              asciinema
               # Broken package currently
               # ghostty
               # https://www.elgato.com/us/en/s/downloads
@@ -198,7 +140,6 @@
               clang-tools
               cmake
               cz-cli
-              d2
               dbeaver-bin
               dive
               dotnet-sdk_8
@@ -219,7 +160,6 @@
               # handbrake
               hadolint
               keepassxc
-              python313Packages.howdoi
               # helm
               istioctl
               jankyborders
@@ -230,26 +170,21 @@
               keycastr
               keystore-explorer
               kotlin
-              kew
               kubectl
               lazydocker
               lazygit
               lazyjj
               # libpq
-              libsixel
               lldb
-              llvmPackages.bintools
               # localstack
               lua-language-server
-              marp-cli
               mas
               maven
               mkalias
               neovim
-              nodenv
               libiconv
               nil
-              nodejs_24
+              nodejs
               # New package broken leaving to fix later
               # (obsidian.overrideAttrs (_: { 
               #   version = "1.8.7";
@@ -261,7 +196,6 @@
               #   };
               # }))
               # obsidian # requires allowUnfree
-              memos     
               ocaml
               ollama
               omnisharp-roslyn
@@ -269,44 +203,28 @@
               openssl
               opentofu
               opencommit
-              pingu 
               pkg-config
               podman
               podman-compose
               podman-desktop
               podman-tui
               postgresql_16
-              # presenterm
-    #           (presenterm.overrideAttrs (oldAttrs: {
-    #             nativeBuildInputs = (oldAttrs.nativeBuildInputs or []) ++ [ pkgs.makeWrapper ];
-    #             buildInputs = (oldAttrs.buildInputs or []) ++ [ pkgs.d2 ];
-    #             cargoBuildFlags = (oldAttrs.cargoBuildFlags or []) ++ [ "--features" "d2" ];
-    #             postInstall = (oldAttrs.postInstall or "") + ''
-    # wrapProgram $out/bin/presenterm \
-    #   --set DYLD_LIBRARY_PATH ${pkgs.libsixel}/lib
-    #             '';
-    #           }))
               pulumi-bin
               python3
               pqrs
               raycast
               redocly
-              riff
               ripgrep
-              rust-analyzer
+              # rust-analyzer
               # rustc
               # rustfmt
               rustup
-              ruby
-              bundler
-              slides
               spacectl
               spotify
               spotifyd
               sqlc
               stow
               stylua
-              taskwarrior3
               tailwindcss
               tailwindcss-language-server
               terraform
@@ -315,7 +233,6 @@
               # tmux
               # gpgme
               yarn
-              # weasyprintBin
               xh
               zig
               zinit
@@ -416,13 +333,13 @@
             export PATH=/opt/workbrew/bin:$PATH
 
             echo "[workbrew] Ensuring brew taps..." | tee -a /var/log/workbrew.log
-                ${pkgs.lib.concatStringsSep "\n" (map (tap: "brew tap ${tap}") myBrew.taps)}
+            ${pkgs.lib.concatStringsSep "\n" (map (tap: "brew tap ${tap}") myBrew.taps)}
 
             echo "[workbrew] Installing brews..." | tee -a /var/log/workbrew.log
-                ${pkgs.lib.concatStringsSep "\n" (map (pkg: "brew install ${pkg}") myBrew.brews)}
+            ${pkgs.lib.concatStringsSep "\n" (map (pkg: "brew install ${pkg}") myBrew.brews)}
 
             echo "[workbrew] Installing casks..." | tee -a /var/log/workbrew.log
-                ${pkgs.lib.concatStringsSep "\n" (map (cask: "brew install --cask ${cask}") myBrew.casks)}
+            ${pkgs.lib.concatStringsSep "\n" (map (cask: "brew install --cask ${cask}") myBrew.casks)}
 
             # echo "[workbrew] Installing Mac App Store apps..." | tee -a /var/log/workbrew.log
             # ${pkgs.lib.concatStringsSep "\n" (pkgs.lib.mapAttrsToList (name: id: "mas install ${toString id}  # ${name}") myBrew.masApps)}
@@ -582,19 +499,6 @@
         inherit system;
         modules = [
           {
-            nixpkgs.overlays = [
-              (final: prev: {
-                lazyjj = prev.lazyjj.overrideAttrs (old: {
-                  doCheck = false;
-                });
-                spotify = prev.spotify.overrideAttrs (old: {
-                  src = prev.fetchurl {
-                    url = "https://download.scdn.co/SpotifyARM64.dmg";
-                    sha256 = "sha256-fTyACxbyIgg7EwIgnNvNerJGUwAVLP2bg0TMnOegWeQ="; 
-                  };
-                });
-              })
-            ];
             nixpkgs.config.allowBroken = true;
             nixpkgs.config.allowUnfree = true;
           }

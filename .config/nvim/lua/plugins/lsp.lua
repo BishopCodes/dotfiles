@@ -11,6 +11,14 @@ return {
           allFeatures = true,
         },
       },
+      pyright = {
+        settings = {
+          python = {
+            pythonPath = ".venv/bin/python",
+            venvPath = ".",
+          },
+        },
+      },
     },
   },
 }

@@ -130,3 +130,40 @@ vim.keymap.set(
   ":!open -R %<CR>",
   { desc = "Open buffer in finder", noremap = true, silent = false }
 )
+
+vim.keymap.set("n", "<leader>ch", "<cmd>FmtVerbHint<cr>", { desc = "Go Format Verb Hint" })
+
+local function add_import()
+  local word = vim.fn.expand("<cword>")
+  vim.api.nvim_feedkeys("ciw" .. word, "n", false)
+  vim.schedule(function()
+    vim.api.nvim_feedkeys(
+      vim.api.nvim_replace_termcodes("<C-x><C-o>", true, false, true),
+      "n",
+      false
+    )
+  end)
+end
+
+vim.keymap.set("n", "<leader>Ai", add_import, { desc = "Auto import current word" })
+
+local nw = require("neowarrior")
+
+vim.keymap.set("n", "<leader>Tl", function()
+  nw.open_left()
+end, { desc = "Open nwarrior on the left side" })
+vim.keymap.set("n", "<leader>Tc", function()
+  nw.open_current()
+end, { desc = "Open nwarrior below current buffer" })
+vim.keymap.set("n", "<leader>Tb", function()
+  nw.open_below()
+end, { desc = "Open nwarrior below current buffer" })
+vim.keymap.set("n", "<leader>Ta", function()
+  nw.open_above()
+end, { desc = "Open nwarrior above current buffer" })
+vim.keymap.set("n", "<leader>Tr", function()
+  nw.open_right()
+end, { desc = "Open nwarrior on the right side" })
+vim.keymap.set("n", "<leader>Tt", function()
+  nw.focus()
+end, { desc = "Focus nwarrior" })

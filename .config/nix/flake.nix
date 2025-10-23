@@ -270,7 +270,7 @@
               openssl
               opentofu
               opencommit
-              opencode
+              opencode # AI-powered coding assistant for terminal
               # pingu 
               pkg-config
               podman

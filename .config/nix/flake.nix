@@ -154,6 +154,7 @@
               "watch"
               "gemini-cli"
               "node-build"
+              "hammerspoon"
               # "commitgenius"
             ];
             taps = [
@@ -269,7 +270,8 @@
               openssl
               opentofu
               opencommit
-              pingu 
+              opencode
+              # pingu 
               pkg-config
               podman
               podman-compose
@@ -590,7 +592,7 @@
                 spotify = prev.spotify.overrideAttrs (old: {
                   src = prev.fetchurl {
                     url = "https://download.scdn.co/SpotifyARM64.dmg";
-                    sha256 = "sha256-fTyACxbyIgg7EwIgnNvNerJGUwAVLP2bg0TMnOegWeQ="; 
+                    sha256 = "sha256-0gwoptqLBJBM0qJQ+dGAZdCD6WXzDJEs0BfOxz7f2nQ="; 
                   };
                 });
               })

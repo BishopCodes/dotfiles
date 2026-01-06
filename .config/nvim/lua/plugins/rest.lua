@@ -7,7 +7,20 @@ return {
   },
   ft = { "http", "rest" },
   opts = {
-    -- your configuration comes here
     global_keymaps = false,
   },
+  config = function(_, opts)
+    local kulala = require("kulala")
+    kulala.setup(opts)
+    local original_get_env = kulala.get_env or function(key)
+      return vim.fn.getenv(key)
+    end
+    kulala.get_env = function(key)
+      local env_value = vim.fn.getenv(key)
+      if env_value and env_value ~= vim.NIL and env_value ~= "" then
+        return env_value
+      end
+      return original_get_env(key)
+    end
+  end,
 }

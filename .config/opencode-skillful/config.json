@@ -1,0 +1,6 @@
+{
+  "debug": false,
+  "basePaths": ["~/.config/opencode/skills", ".opencode/skills"],
+  "promptRenderer": "xml",
+  "modelRenderers": {}
+}

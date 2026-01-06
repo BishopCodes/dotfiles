@@ -155,6 +155,15 @@
               "gemini-cli"
               "node-build"
               "hammerspoon"
+              "luarocks"
+              "pnpm"
+              "opencode"
+              "pandoc"
+              "basictex"
+              "spotify_player"
+              "fjira"
+                            "huseyinbabal/tap/taws"
+
               # "commitgenius"
             ];
             taps = [
@@ -179,6 +188,7 @@
               # darwin.apple_sdk.frameworks.Security
               aerospace
               asciinema
+              amazon-q-cli
               # Broken package currently
               # ghostty
               # https://www.elgato.com/us/en/s/downloads
@@ -241,7 +251,10 @@
               lldb
               llvmPackages.bintools
               # localstack
+              lua5_1
               lua-language-server
+              luajit
+              luajitPackages.luarocks
               marp-cli
               mas
               maven
@@ -249,6 +262,8 @@
               neovim
               nodenv
               libiconv
+              librespot
+              navi
               nil
               nodejs_24
               # New package broken leaving to fix later
@@ -264,13 +279,14 @@
               # obsidian # requires allowUnfree
               memos     
               ocaml
+              ocamlPackages.ocaml-lsp
               ollama
               omnisharp-roslyn
               opam
               openssl
               opentofu
               opencommit
-              opencode # AI-powered coding assistant for terminal
+              # opencode # AI-powered coding assistant for terminal
               # pingu 
               pkg-config
               podman
@@ -305,6 +321,7 @@
               spacectl
               spotify
               spotifyd
+              # spotify-player
               sqlc
               stow
               stylua
@@ -318,7 +335,9 @@
               # gpgme
               yarn
               # weasyprintBin
+              vue-language-server
               xh
+              yq
               zig
               zinit
               zlib
@@ -528,7 +547,7 @@
           programs.zsh.enableFzfGit = true;
           programs.zsh.enableFzfHistory = true;
           programs.zsh.enableFzfCompletion = true;
-          programs.zsh.enableGlobalCompInit = true;
+          programs.zsh.enableGlobalCompInit = false;
           # programs.fish.enable = true;
 
 

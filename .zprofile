@@ -1,5 +1,3 @@
-# Load completions
-autoload -U compinit && compinit -u
 
 # Workbrew
 # export HOMEBREW_BREW_WRAPPER=/opt/workbrew/bin/brew

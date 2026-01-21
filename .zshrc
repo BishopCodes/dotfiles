@@ -1,6 +1,6 @@
-# Load completions
- autoload -U compinit && compinit -u
-ZSH_DISABLE_COMPFIX="true"
+
+
+export EDITOR=vim
 
 # https://mac.install.guide/terminal/zshrc-zprofile
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -70,6 +70,7 @@ alias esudo='sudo -E env "PATH=$PATH"'
 
 alias vi=nvim
 alias vim=nvim
+alias nvim-http='[ -f .env.keys ] && dotenvx run -- nvim || nvim'
 alias docker=podman
 alias docker-compose=podman-compose
 
@@ -85,6 +86,11 @@ alias rebuildnix='sudo --preserve-env=HOME $(which darwin-rebuild) switch -L --f
 alias upgradenix='nix flake update --flake ~/dotfiles/.config/nix'
 
 alias rec='asciinema rec'
+
+alias findport='lsof -i :8080 || netstat -anv | grep '
+
+# Git Ignored
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
 fzjq() {
   local input jq_query
@@ -146,6 +152,8 @@ ZINIT_HOME=$(nix-store --query --requisites /run/current-system/sw | awk '/zinit
 
 # Load Zinit
 source "${ZINIT_HOME}/share/zinit/zinit.zsh"
+autoload -U compinit && compinit -u
+
 
 # Powerlevel passing depth down for the git clone
 zinit ice depth=1; zinit light romkatv/powerlevel10k

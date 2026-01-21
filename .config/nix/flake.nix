@@ -194,6 +194,7 @@
               # https://www.elgato.com/us/en/s/downloads
               # https://www.insta360.com/download/insta360-link2
               # obs-studio
+              # atuin
               gh
               sketchybar
               sketchybar-app-font
@@ -229,6 +230,13 @@
               go
               # handbrake
               hadolint
+              iftop
+              # iotop
+              macpm
+              btop
+               # wavemon
+              grex
+              pass
               keepassxc
               python313Packages.howdoi
               # helm

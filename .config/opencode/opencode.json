@@ -91,7 +91,6 @@
   },
   "plugin": [
     "opencode-openai-codex-auth",
-    "@plannotator/opencode@latest",
     "opencode-websearch-cited@1.1.1",
     "opencode-copilot-usage-toast",
     "@tarquinen/opencode-dcp@latest"
@@ -361,6 +360,11 @@
       "type": "local",
       "command": ["run", "--rm", "-i", "bpradana/sequentialthinking"],
       "enabled": false
+    },
+    "openfeature": {
+      "type": "local",
+      "command": ["npx", "-y", "@openfeature/mcp"],
+      "enabled": true
     }
   },
   "$schema": "https://opencode.ai/config.json"

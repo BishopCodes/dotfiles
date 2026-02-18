@@ -157,18 +157,20 @@
               "hammerspoon"
               "luarocks"
               "pnpm"
-              "opencode"
+              "anomalyco/tap/opencode"
               "pandoc"
               "basictex"
               "spotify_player"
               "fjira"
-                            "huseyinbabal/tap/taws"
-
+              "huseyinbabal/tap/taws"
+              "steveyegge/beads/bd"
+              "krunkit"
               # "commitgenius"
             ];
             taps = [
               "InstantClientTap/instantclient"
               "bannawandoor27/Commitgenius"
+              "slp/krunkit"
             ];
             casks = [
               # "ghostty"
@@ -188,6 +190,7 @@
               # darwin.apple_sdk.frameworks.Security
               aerospace
               asciinema
+              ani-cli
               amazon-q-cli
               # Broken package currently
               # ghostty
@@ -210,6 +213,8 @@
               clang-tools
               cmake
               cz-cli
+              devcontainer
+              devbox
               d2
               dbeaver-bin
               dive
@@ -238,6 +243,7 @@
               grex
               pass
               keepassxc
+              # krunkit
               python313Packages.howdoi
               # helm
               istioctl
@@ -489,7 +495,7 @@
                   };             
                 }
                 {
-                  app = "/Applications/Ghostty.app";
+                  app = "/ApplicationsGhostty.app";
                 }
                 {
                   app = "/Applications/Nix Apps/dbeaver.app";

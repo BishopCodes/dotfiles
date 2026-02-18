@@ -90,7 +90,7 @@ alias rec='asciinema rec'
 alias findport='lsof -i :8080 || netstat -anv | grep '
 
 # Git Ignored
-[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+[[ -f ~/dotfiles/.zshrc.local ]] && source ~/dotfiles/.zshrc.local
 
 fzjq() {
   local input jq_query
@@ -241,3 +241,5 @@ bindkey '^n' history-search-forward
 # END opam configuration
 
 export GPG_TTY=$(tty)
+
+[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"

@@ -3,13 +3,16 @@ return {
   opts = {
     strategies = {
       inline = {
-        adapter = { name = "copilot", model = "gpt-4o" },
+        adapter = { name = "opencode", model = "GPT 5.1 Codex Mini (OAuth)" },
+        -- adapter = { name = "copilot", model = "gpt-4o" },
       },
       cmd = {
-        adapter = { name = "copilot", model = "gpt-4o" },
+        adapter = { name = "opencode", model = "GPT 5.1 Codex Mini (OAuth)" },
+        -- adapter = { name = "copilot", model = "gpt-4o" },
       },
       chat = {
-        adapter = { name = "copilot", model = "gpt-4o" },
+        adapter = { name = "opencode", model = "GPT 5.1 Codex Mini (OAuth)" },
+        -- adapter = { name = "copilot", model = "gpt-4o" },
         tools = {
           groups = {
             ["github_pr_workflow"] = {

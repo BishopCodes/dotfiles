@@ -1,5 +1,5 @@
 {
-  "theme": "cappuccin",
+  "theme": "catppuccin",
   "keybinds": {
     "leader": "ctrl+x",
     "app_exit": "ctrl+c,ctrl+d,<leader>q",
@@ -87,285 +87,92 @@
     "session_parent": "<leader>up",
     "terminal_suspend": "ctrl+z",
     "terminal_title_toggle": "none",
-    "tips_toggle": "<leader>h"
+    "tips_toggle": "<leader>h",
   },
   "plugin": [
-    "opencode-openai-codex-auth",
     "opencode-websearch-cited@1.1.1",
     "opencode-copilot-usage-toast",
-    "@tarquinen/opencode-dcp@latest"
+    "@tarquinen/opencode-dcp@latest",
+    "opencode-beads@0.4.0",
+    "opencode-devcontainers",
   ],
   "snapshot": false,
   "share": "disabled",
-  "disabled_providers": [
-    "amazon_bedrock",
-    "anthropic",
-    "azure_openai",
-    "cerebras",
-    "deepseek",
-    "fireworks_ai",
-    "groq",
-    "moonshot_ai",
-    "opencode_zen",
-    "openrouter",
-    "together_ai",
-    "xai",
-    "z.ai",
-    "opencode"
-  ],
+  "enabled_providers": ["amazon-bedrock", "openai", "github-copilot"],
   "agent": {
     "dalebot-reviewer": {
-      "model": "github-copilot/claude-4.5-sonnet",
+      "model": "github-copilot/claude-haiku-4.5",
       "prompt": "Role: You are a senior software engineer and platform architect acting as a strong but constructive code reviewer. Your goal is to improve correctness, maintainability, security, and long-term architectural fit, not just style.\n\nReview Philosophy: Assume the author is competent; focus on making the system better, not nitpicking. Prefer clear, boring, and predictable code over cleverness. Optimize for future readers and maintainers, not just current functionality. Treat production code as something that must survive scale, failure, and partial outages.\n\nCheck List:\n- Does the code clearly express its intent?\n- Are there any edge cases that are unhandled (nulls, empty states, retries, partial failures)?\n- Are assumptions documented or enforced in code?\n- Would this code behave correctly under concurrency or repeated execution?\n- Do the changes fit the existing architectural patterns of the codebase?\n- Is responsibility clearly separated (no hidden side effects or leaky abstractions)?\n- Are there signs that logic belongs in a different layer or service?\n- Are unnecessary dependencies added where not necessary or could a better alternative be used?\n- Are authentication, authorization and input validation explicit and enforced?\n- Are secrets, tokens or credentials handled safely?\n- Are trust boundaries clear (client vs server, internal vs external calls)?\n- Does this code introduce any attack vectors?\n- What happens when dependencies fail, timeout, or return unexpected data?\n- Are retries, exponential backoff and idempotency considered where appropriate?\n- Are there any obvious N+1s, unbounded loops, or unnecessary allocations?\n- Does this scale with data size or traffic?\n- Are expensive operations cached, batched or deferred appropriately?\n- Is the code easy to read without comments? Are comments accurate and necessary?\n- Are names precise and consistent with the language?\n- Is complexity justified or could it be simplified?\n- Would a new engineer understand this after 6 months on the job?\n- Are tests present where logic is non-trivial or business-critical? Do tests validate behavior and failure cases?\n\nFeedback Style: Be direct, specific and actionable. Call out problems that must be fixed before merge. Outline risks or tradeoffs worth discussing. Provide recommended but optional improvements with reasoning. If something is good, explicitly say so.\n\nOutput format: Start with a high-level summary (2-4 sentences). Then list findings under clear sections: Blocking Issues, Architectural Concerns, Security / Reliability Notes, Maintainability Suggestions. Reference code by function or file followed by line numbers.\n",
       "tools": {
         "write": false,
-        "edit": false
+        "edit": false,
       },
-      "description": "Senior engineer code reviewer: prioritizes correctness, reliability, security, and long-term architecture. Produces actionable findings grouped into Blocking Issues, Architectural Concerns, Security / Reliability Notes, and Maintainability Suggestions."
-    }
+      "description": "Senior engineer code reviewer: prioritizes correctness, reliability, security, and long-term architecture. Produces actionable findings grouped into Blocking Issues, Architectural Concerns, Security / Reliability Notes, and Maintainability Suggestions.",
+    },
   },
   "provider": {
-    "openai": {
-      "models": {
-        "gpt-5.2": {
-          "name": "GPT 5.2 (OAuth)",
-          "limit": {
-            "context": 272000,
-            "output": 128000
-          },
-          "modalities": {
-            "input": ["text", "image"],
-            "output": ["text"]
-          },
-          "variants": {
-            "none": {
-              "reasoningEffort": "none",
-              "reasoningSummary": "auto",
-              "textVerbosity": "medium"
-            },
-            "low": {
-              "reasoningEffort": "low",
-              "reasoningSummary": "auto",
-              "textVerbosity": "medium"
-            },
-            "medium": {
-              "reasoningEffort": "medium",
-              "reasoningSummary": "auto",
-              "textVerbosity": "medium"
-            },
-            "high": {
-              "reasoningEffort": "high",
-              "reasoningSummary": "detailed",
-              "textVerbosity": "medium"
-            },
-            "xhigh": {
-              "reasoningEffort": "xhigh",
-              "reasoningSummary": "detailed",
-              "textVerbosity": "medium"
-            }
-          }
-        },
-        "gpt-5.2-codex": {
-          "name": "GPT 5.2 Codex (OAuth)",
-          "limit": {
-            "context": 272000,
-            "output": 128000
-          },
-          "modalities": {
-            "input": ["text", "image"],
-            "output": ["text"]
-          },
-          "variants": {
-            "low": {
-              "reasoningEffort": "low",
-              "reasoningSummary": "auto",
-              "textVerbosity": "medium"
-            },
-            "medium": {
-              "reasoningEffort": "medium",
-              "reasoningSummary": "auto",
-              "textVerbosity": "medium"
-            },
-            "high": {
-              "reasoningEffort": "high",
-              "reasoningSummary": "detailed",
-              "textVerbosity": "medium"
-            },
-            "xhigh": {
-              "reasoningEffort": "xhigh",
-              "reasoningSummary": "detailed",
-              "textVerbosity": "medium"
-            }
-          }
-        },
-        "gpt-5.1-codex-max": {
-          "name": "GPT 5.1 Codex Max (OAuth)",
-          "limit": {
-            "context": 272000,
-            "output": 128000
-          },
-          "modalities": {
-            "input": ["text", "image"],
-            "output": ["text"]
-          },
-          "variants": {
-            "low": {
-              "reasoningEffort": "low",
-              "reasoningSummary": "detailed",
-              "textVerbosity": "medium"
-            },
-            "medium": {
-              "reasoningEffort": "medium",
-              "reasoningSummary": "detailed",
-              "textVerbosity": "medium"
-            },
-            "high": {
-              "reasoningEffort": "high",
-              "reasoningSummary": "detailed",
-              "textVerbosity": "medium"
-            },
-            "xhigh": {
-              "reasoningEffort": "xhigh",
-              "reasoningSummary": "detailed",
-              "textVerbosity": "medium"
-            }
-          }
-        },
-        "gpt-5.1-codex": {
-          "name": "GPT 5.1 Codex (OAuth)",
-          "limit": {
-            "context": 272000,
-            "output": 128000
-          },
-          "modalities": {
-            "input": ["text", "image"],
-            "output": ["text"]
-          },
-          "variants": {
-            "low": {
-              "reasoningEffort": "low",
-              "reasoningSummary": "auto",
-              "textVerbosity": "medium"
-            },
-            "medium": {
-              "reasoningEffort": "medium",
-              "reasoningSummary": "auto",
-              "textVerbosity": "medium"
-            },
-            "high": {
-              "reasoningEffort": "high",
-              "reasoningSummary": "detailed",
-              "textVerbosity": "medium"
-            }
-          }
-        },
-        "gpt-5.1-codex-mini": {
-          "name": "GPT 5.1 Codex Mini (OAuth)",
-          "limit": {
-            "context": 272000,
-            "output": 128000
-          },
-          "modalities": {
-            "input": ["text", "image"],
-            "output": ["text"]
-          },
-          "variants": {
-            "medium": {
-              "reasoningEffort": "medium",
-              "reasoningSummary": "auto",
-              "textVerbosity": "medium"
-            },
-            "high": {
-              "reasoningEffort": "high",
-              "reasoningSummary": "detailed",
-              "textVerbosity": "medium"
-            }
-          }
-        },
-        "gpt-5.1": {
-          "name": "GPT 5.1 (OAuth)",
-          "limit": {
-            "context": 272000,
-            "output": 128000
-          },
-          "modalities": {
-            "input": ["text", "image"],
-            "output": ["text"]
-          },
-          "variants": {
-            "none": {
-              "reasoningEffort": "none",
-              "reasoningSummary": "auto",
-              "textVerbosity": "medium"
-            },
-            "low": {
-              "reasoningEffort": "low",
-              "reasoningSummary": "auto",
-              "textVerbosity": "low"
-            },
-            "medium": {
-              "reasoningEffort": "medium",
-              "reasoningSummary": "auto",
-              "textVerbosity": "medium"
-            },
-            "high": {
-              "reasoningEffort": "high",
-              "reasoningSummary": "detailed",
-              "textVerbosity": "high"
-            }
-          }
-        }
-      },
+    "pal": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Podman AI Labs",
       "options": {
-        "reasoningEffort": "medium",
-        "reasoningSummary": "auto",
-        "textVerbosity": "medium",
-        "include": ["reasoning.encrypted_content"],
-        "store": false
-      }
-    }
+        "baseURL": "http://localhost:54440/v1",
+        "tools": true,
+      },
+      "models": {
+        "gpt-oss": {
+          "name": "gpt-oss-20b",
+          "id": "gpt-oss-20b",
+        },
+      },
+    },
   },
   "mcp": {
     "playwright": {
       "type": "local",
       "command": ["npx", "@playwright/mcp@latest", "--vision"],
-      "enabled": true
+      "enabled": true,
     },
     "next-devtools": {
       "type": "local",
       "command": ["npx", "-y", "next-devtools-mcp@latest"],
-      "enabled": true
+      "enabled": true,
     },
     "awslabs.aws-documentation-mcp-server": {
       "type": "local",
       "command": ["uvx", "awslabs.aws-documentation-mcp-server@latest"],
-      "enabled": true
+      "enabled": true,
     },
     "github": {
       "type": "remote",
       "url": "https://api.githubcopilot.com/mcp/",
-      "enabled": true
+      "enabled": true,
     },
     "git": {
       "type": "local",
       "command": ["uvx", "mcp-server-git"],
-      "enabled": true
+      "enabled": true,
     },
     "atlassian": {
       "type": "remote",
       "url": "https://mcp.atlassian.com/v1/sse",
-      "enabled": true
+      "enabled": true,
     },
     "sequentialthinking": {
       "type": "local",
-      "command": ["run", "--rm", "-i", "bpradana/sequentialthinking"],
-      "enabled": false
+      "command": ["podman", "run", "--rm", "-i", "bpradana/sequentialthinking"],
+      "enabled": false,
     },
     "openfeature": {
       "type": "local",
       "command": ["npx", "-y", "@openfeature/mcp"],
-      "enabled": true
-    }
+      "enabled": true,
+    },
+    "markitdown": {
+      "type": "remote",
+      "url": "http://127.0.0.1:3001/mcp",
+      "enabled": true,
+    },
   },
-  "$schema": "https://opencode.ai/config.json"
+  "instructions": ["~/dotfiles/opencode/rules/**/*.md"],
+  "$schema": "https://opencode.ai/config.json",
 }
